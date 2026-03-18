@@ -1,0 +1,68 @@
+<div class="max-w-6xl mx-auto space-y-8 relative">
+  <!-- Glowing Background Orbs -->
+  <div class="absolute top-0 right-1/4 w-96 h-96 bg-maximo-purple/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+  <div class="flex flex-col md:flex-row justify-between items-center bg-black/40 p-4 rounded-xl border border-white/5 relative z-10 gap-4">
+    <div class="flex-1 w-full md:w-auto flex gap-2">
+      <input type="text" [(ngModel)]="keyword" (keyup.enter)="onSearch()" placeholder="Search scripts..." class="input-field w-full md:max-w-md">
+      <button (click)="onSearch()" class="btn-secondary whitespace-nowrap">Search</button>
+    </div>
+    
+    <div class="flex gap-2 text-sm overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+      <button (click)="applyCategoryFilter('')" [ngClass]="!category ? 'bg-maximo-purple text-white' : 'bg-maximo-purple/10 text-maximo-purple hover:bg-maximo-purple/30'" class="px-3 py-1 rounded-full transition-colors whitespace-nowrap">All</button>
+      <button (click)="applyCategoryFilter('Bash')" [ngClass]="category === 'Bash' ? 'bg-maximo-purple text-white' : 'bg-maximo-purple/10 text-maximo-purple hover:bg-maximo-purple/30'" class="px-3 py-1 rounded-full transition-colors whitespace-nowrap">Bash</button>
+      <button (click)="applyCategoryFilter('Python')" [ngClass]="category === 'Python' ? 'bg-maximo-purple text-white' : 'bg-maximo-purple/10 text-maximo-purple hover:bg-maximo-purple/30'" class="px-3 py-1 rounded-full transition-colors whitespace-nowrap">Python</button>
+      <button (click)="applyCategoryFilter('PowerShell')" [ngClass]="category === 'PowerShell' ? 'bg-maximo-purple text-white' : 'bg-maximo-purple/10 text-maximo-purple hover:bg-maximo-purple/30'" class="px-3 py-1 rounded-full transition-colors whitespace-nowrap">PowerShell</button>
+      <button (click)="applyCategoryFilter('JavaScript')" [ngClass]="category === 'JavaScript' ? 'bg-maximo-purple text-white' : 'bg-maximo-purple/10 text-maximo-purple hover:bg-maximo-purple/30'" class="px-3 py-1 rounded-full transition-colors whitespace-nowrap">JavaScript</button>
+    </div>
+
+    <div class="flex gap-4 items-center">
+      <a *ngIf="authService.isAuthenticated()" routerLink="/scripts/new" class="btn-primary whitespace-nowrap border-maximo-purple shadow-neon-purple hover:shadow-[0_0_20px_rgba(138,43,226,0.8)]">+ Upload Script</a>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-center py-20">
+    <div class="w-12 h-12 border-4 border-maximo-purple border-t-transparent rounded-full animate-spin shadow-neon-purple"></div>
+  </div>
+
+  <div *ngIf="!loading && scripts.length === 0" class="text-center py-20 text-gray-400 glass-panel border-maximo-purple/20">
+    <p>No scripts found matching your criteria.</p>
+  </div>
+
+  <div *ngIf="!loading && scripts.length > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
+    <div *ngFor="let script of scripts" class="glass-panel p-6 hover:-translate-y-1 hover:shadow-neon-purple transition-all duration-300 group cursor-pointer flex flex-col h-full border border-white/10 hover:border-maximo-purple/50" [routerLink]="['/scripts', script.id]">
+      
+      <div class="flex justify-between items-start mb-4">
+        <span class="text-xs font-bold px-3 py-1 rounded-full bg-maximo-purple/20 text-maximo-purple uppercase tracking-wider border border-maximo-purple/30">{{ script.category }}</span>
+        <span class="text-xs text-maximo-cyan flex items-center gap-1 font-mono">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+          {{ script.views }}
+        </span>
+      </div>
+      
+      <h3 class="text-xl font-bold text-white mb-2 group-hover:text-maximo-purple transition-colors truncate">{{ script.title }}</h3>
+      
+      <p class="text-gray-400 text-sm mb-4 line-clamp-2 h-10">{{ script.description }}</p>
+
+      <div class="bg-black/60 rounded p-3 mb-4 flex-grow relative overflow-hidden group-hover:bg-black/80 transition-colors">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-maximo-purple/50"></div>
+        <pre class="font-mono text-xs text-gray-300 overflow-hidden text-ellipsis whitespace-nowrap">{{ script.code.split('\n')[0] || script.code }}</pre>
+      </div>
+      
+      <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2 text-xs text-gray-400">
+          <div class="w-6 h-6 rounded-full bg-maximo-cyan/30 flex items-center justify-center text-white font-bold">{{ script.authorName.charAt(0) }}</div>
+          <span class="font-medium text-white">{{ script.authorName }}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="totalPages > 1 && !loading" class="flex justify-center gap-4 mt-8">
+    <button (click)="prevPage()" [disabled]="currentPage === 0" class="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 border-maximo-purple/50 hover:bg-maximo-purple hover:text-white hover:border-maximo-purple">&larr; Prev</button>
+    <span class="flex items-center text-gray-400 text-sm font-mono">Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1" class="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 border-maximo-purple/50 hover:bg-maximo-purple hover:text-white hover:border-maximo-purple">Next &rarr;</button>
+  </div>
+</div>

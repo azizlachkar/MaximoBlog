@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "MaximoBlog",
+            "request": "launch",
+            "mainClass": "com.example.maximoblog.MaximoblogApplication",
+            "projectName": "maximoblog",
+            "cwd": "${workspaceFolder}/maximoblog",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": "-Dspring.profiles.active=default"
+        }
+    ]
+}

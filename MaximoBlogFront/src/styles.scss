@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-maximo-darker text-gray-200 font-sans antialiased min-h-screen selection:bg-maximo-cyan selection:text-black;
+    background-image: radial-gradient(circle at top right, rgba(138, 43, 226, 0.15) 0%, transparent 40%),
+                      radial-gradient(circle at bottom left, rgba(0, 240, 255, 0.1) 0%, transparent 40%);
+    background-attachment: fixed;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-wide;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl;
+  }
+  
+  .btn-primary {
+    @apply relative px-6 py-2 rounded-lg font-semibold text-white overflow-hidden transition-all duration-300;
+    background: linear-gradient(45deg, theme('colors.maximo-purple'), theme('colors.maximo-cyan'));
+    background-size: 200% auto;
+  }
+  
+  .btn-primary:hover {
+    background-position: right center;
+    @apply shadow-neon-cyan -translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-2 rounded-lg font-semibold text-maximo-cyan border border-maximo-cyan/30 hover:border-maximo-cyan hover:shadow-neon-cyan hover:bg-maximo-cyan/10 transition-all duration-300;
+  }
+  
+  .input-field {
+    @apply w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-maximo-cyan transition-all;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

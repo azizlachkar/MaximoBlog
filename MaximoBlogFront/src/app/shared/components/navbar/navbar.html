@@ -1,0 +1,57 @@
+<nav class="fixed top-0 left-0 right-0 z-50 glass-panel border-x-0 border-t-0 rounded-none bg-maximo-dark/80 px-6 py-4 transition-all">
+  <div class="container mx-auto flex items-center justify-between">
+    
+    <!-- Logo -->
+    <a routerLink="/" class="text-2xl font-bold font-display tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-maximo-cyan to-maximo-purple drop-shadow-[0_0_10px_rgba(0,240,255,0.7)] hover:drop-shadow-[0_0_20px_rgba(138,43,226,0.9)] transition-all">
+      MAXIMO<span class="text-white font-light">BLOG</span>
+    </a>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center space-x-8">
+      <a routerLink="/" class="text-gray-300 hover:text-maximo-cyan transition-colors">Home</a>
+      <a routerLink="/articles" class="text-gray-300 hover:text-maximo-cyan transition-colors">Articles</a>
+      <a routerLink="/scripts" class="text-gray-300 hover:text-maximo-cyan transition-colors">Scripts</a>
+
+      <div class="h-6 w-px bg-white/20"></div>
+
+      <!-- Auth Buttons -->
+      <ng-container *ngIf="!authService.isAuthenticated(); else userMenu">
+        <a routerLink="/login" class="text-gray-300 hover:text-white transition-colors">Log In</a>
+        <a routerLink="/register" class="btn-primary">Sign Up</a>
+      </ng-container>
+
+      <ng-template #userMenu>
+        <div class="flex items-center space-x-4">
+          <span class="text-sm text-maximo-cyan">
+            Welcome, <span class="font-bold text-white">{{ authService.getCurrentUser().name }}</span>
+          </span>
+          <button (click)="logout()" class="btn-secondary text-sm px-4 py-1.5">
+            Logout
+          </button>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button (click)="toggleMenu()" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path *ngIf="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        <path *ngIf="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu Dropdown -->
+  <div *ngIf="isMenuOpen" class="md:hidden mt-4 pt-4 border-t border-white/10 flex flex-col space-y-4">
+    <a routerLink="/" class="text-gray-300 hover:text-maximo-cyan" (click)="toggleMenu()">Home</a>
+    <a routerLink="/articles" class="text-gray-300 hover:text-maximo-cyan" (click)="toggleMenu()">Articles</a>
+    
+    <ng-container *ngIf="!authService.isAuthenticated()">
+      <a routerLink="/login" class="text-maximo-cyan" (click)="toggleMenu()">Log In</a>
+      <a routerLink="/register" class="text-maximo-purple" (click)="toggleMenu()">Sign Up</a>
+    </ng-container>
+    <ng-container *ngIf="authService.isAuthenticated()">
+      <button (click)="logout(); toggleMenu()" class="text-red-400 text-left">Logout</button>
+    </ng-container>
+  </div>
+</nav>

@@ -1,0 +1,82 @@
+<div class="space-y-16">
+  
+  <!-- Hero Section -->
+  <section class="text-center py-20 relative">
+    <div class="absolute inset-0 bg-maximo-cyan/5 blur-[120px] rounded-full pointer-events-none"></div>
+    <h1 class="text-5xl md:text-7xl font-bold font-display text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 mb-6 drop-shadow-md">
+      Evolve Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-maximo-cyan to-maximo-purple">Code.</span>
+    </h1>
+    <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+      Join the Maximo platform where developers share futuristic concepts, read cutting-edge articles, and exchange powerful scripts.
+    </p>
+    <div class="flex justify-center gap-6">
+      <a routerLink="/articles" class="btn-primary">Explore Articles</a>
+      <a routerLink="/scripts" class="btn-secondary">Browse Scripts</a>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex justify-center py-10">
+    <div class="w-12 h-12 border-4 border-maximo-cyan border-t-transparent rounded-full animate-spin shadow-neon-cyan"></div>
+  </div>
+
+  <div *ngIf="!loading" class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    
+    <!-- Latest Articles -->
+    <section>
+      <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
+        <h2 class="text-3xl text-white">Latest Articles</h2>
+        <a routerLink="/articles" class="text-maximo-cyan hover:text-white transition-colors text-sm font-semibold tracking-wider">VIEW ALL &rarr;</a>
+      </div>
+      
+      <div class="space-y-6">
+        <div *ngFor="let article of latestArticles" class="glass-panel p-6 hover:-translate-y-1 hover:shadow-neon-cyan transition-all duration-300 group cursor-pointer" [routerLink]="['/articles', article.id]">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xs font-bold px-2 py-1 rounded bg-maximo-cyan/20 text-maximo-cyan uppercase tracking-wider">{{ article.category }}</span>
+            <span class="text-xs text-gray-500">{{ article.createdAt | date:'mediumDate' }}</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2 group-hover:text-maximo-cyan transition-colors">{{ article.title }}</h3>
+          <p class="text-gray-400 text-sm line-clamp-2">{{ article.content }}</p>
+          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
+            <div class="w-6 h-6 rounded-full bg-maximo-purple/30 flex items-center justify-center text-white font-bold">{{ article.authorName.charAt(0) }}</div>
+            <span>{{ article.authorName }}</span>
+          </div>
+        </div>
+        
+        <div *ngIf="latestArticles.length === 0" class="text-gray-500 italic p-6 glass-panel text-center">
+          No articles found. Be the first to write one!
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Scripts -->
+    <section>
+      <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
+        <h2 class="text-3xl text-white">Popular Scripts</h2>
+        <a routerLink="/scripts" class="text-maximo-purple hover:text-white transition-colors text-sm font-semibold tracking-wider">VIEW ALL &rarr;</a>
+      </div>
+      
+      <div class="space-y-6">
+        <div *ngFor="let script of popularScripts" class="glass-panel p-6 hover:-translate-y-1 hover:shadow-neon-purple transition-all duration-300 group cursor-pointer" [routerLink]="['/scripts', script.id]">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xs font-bold px-2 py-1 rounded bg-maximo-purple/20 text-maximo-purple uppercase tracking-wider">{{ script.category }}</span>
+            <span class="text-xs text-maximo-cyan flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+              {{ script.views }} views
+            </span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2 group-hover:text-maximo-purple transition-colors">{{ script.title }}</h3>
+          <p class="text-gray-400 text-sm line-clamp-2 mb-4">{{ script.description }}</p>
+          <div class="bg-black/50 p-3 rounded text-xs font-mono text-gray-300 truncate border border-white/5">
+            {{ script.code.substring(0, 100) }}...
+          </div>
+        </div>
+
+        <div *ngIf="popularScripts.length === 0" class="text-gray-500 italic p-6 glass-panel text-center">
+          No scripts found. Be the first to share one!
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

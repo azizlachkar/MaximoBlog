@@ -1,0 +1,50 @@
+<div class="max-w-3xl mx-auto py-10 relative">
+  <!-- Decorative background glows -->
+  <div class="absolute top-0 center w-96 h-96 bg-maximo-cyan/5 blur-[100px] rounded-full pointer-events-none"></div>
+  
+  <div class="glass-panel p-8 md:p-10 relative z-10">
+    <div class="mb-8 border-b border-white/10 pb-6">
+      <h1 class="text-3xl font-display text-white mb-2">{{ isEditMode ? 'Edit Article' : 'Compose New Article' }}</h1>
+      <p class="text-gray-400 text-sm">Share your knowledge with the futuristic community</p>
+    </div>
+
+    <div *ngIf="loadingData" class="flex justify-center py-10">
+      <div class="w-10 h-10 border-4 border-maximo-cyan border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <div *ngIf="error" class="mb-6 p-4 rounded bg-red-500/10 border border-red-500/50 text-red-400 text-sm">
+      {{ error }}
+    </div>
+
+    <form *ngIf="!loadingData" (ngSubmit)="onSubmit()" #articleForm="ngForm" class="space-y-6">
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Title</label>
+        <input type="text" name="title" [(ngModel)]="title" required minlength="3" maxlength="255" class="input-field text-lg font-bold" placeholder="Give your article a catchy name...">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Category</label>
+        <input type="text" name="category" [(ngModel)]="category" required class="input-field" placeholder="e.g. Java, Spring Boot, Artificial Intelligence">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Content</label>
+        <p class="text-xs text-gray-500 mb-2">Markdown is visually supported. Use plain text formatting.</p>
+        <textarea name="content" [(ngModel)]="content" required rows="15" class="input-field font-mono text-sm resize-y leading-relaxed" placeholder="Write your futuristic insights here..."></textarea>
+      </div>
+
+      <div class="pt-6 border-t border-white/10 flex justify-end gap-4">
+        <button type="button" (click)="cancel()" class="btn-secondary px-6">Cancel</button>
+        <button type="submit" [disabled]="articleForm.invalid || loading" class="btn-primary px-8 flex justify-center items-center min-w-[140px] disabled:opacity-50 disabled:cursor-not-allowed">
+          <span *ngIf="!loading">{{ isEditMode ? 'Update' : 'Publish' }}</span>
+          <svg *ngIf="loading" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

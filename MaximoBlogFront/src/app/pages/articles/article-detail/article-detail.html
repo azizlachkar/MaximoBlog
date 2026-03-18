@@ -1,0 +1,64 @@
+<div class="max-w-4xl mx-auto py-8">
+  <div *ngIf="loading" class="flex justify-center py-20">
+    <div class="w-12 h-12 border-4 border-maximo-cyan border-t-transparent rounded-full animate-spin shadow-neon-cyan"></div>
+  </div>
+
+  <div *ngIf="error" class="glass-panel p-8 text-center text-red-400">
+    {{ error }}
+    <div class="mt-4"><a routerLink="/articles" class="btn-secondary">Back to Articles</a></div>
+  </div>
+
+  <article *ngIf="!loading && article" class="glass-panel p-8 md:p-12 relative overflow-hidden">
+    <!-- Subtle Glow Background -->
+    <div class="absolute top-0 right-0 w-64 h-64 bg-maximo-cyan/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+    <header class="mb-10 relative z-10 border-b border-white/10 pb-8">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <span class="px-3 py-1 text-xs font-bold uppercase tracking-widest text-maximo-cyan bg-maximo-cyan/10 border border-maximo-cyan/20 rounded">{{ article.category }}</span>
+        <span class="text-sm text-gray-500 font-mono">{{ article.createdAt | date:'longDate' }}</span>
+      </div>
+      
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-white mb-6 leading-tight drop-shadow-md">{{ article.title }}</h1>
+      
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-maximo-purple/30 flex items-center justify-center text-xl text-white font-bold border border-maximo-purple/50 shadow-neon-purple">
+            {{ article.authorName.charAt(0) }}
+          </div>
+          <div>
+            <div class="font-bold text-white">{{ article.authorName }}</div>
+            <div class="text-xs text-gray-400 font-mono">{{ article.authorEmail }}</div>
+          </div>
+        </div>
+
+        <!-- Action Buttons for Author -->
+        <div *ngIf="isAuthor()" class="flex gap-3">
+          <a [routerLink]="['/articles', article.id, 'edit']" class="btn-secondary px-4 py-2 text-sm flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            Edit
+          </a>
+          <button (click)="deleteArticle()" class="px-4 py-2 text-sm rounded bg-red-500/10 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white transition-all flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            Delete
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="prose prose-invert max-w-none text-gray-300 relative z-10 leading-relaxed text-lg pb-10 border-b border-white/10 mb-10 whitespace-pre-line">
+      {{ article.content }}
+    </div>
+
+    <!-- Bookmark Button -->
+    <div class="flex justify-end gap-4 items-center mb-8 relative z-10">
+      <span class="text-xs text-gray-500 font-bold uppercase tracking-widest">SAVE TO DATABANKS</span>
+      <app-bookmark-button [articleId]="article.id"></app-bookmark-button>
+    </div>
+
+    <!-- Comments -->
+    <div class="relative z-10">
+      <app-comment-section [articleId]="article.id"></app-comment-section>
+    </div>
+
+  </article>
+</div>

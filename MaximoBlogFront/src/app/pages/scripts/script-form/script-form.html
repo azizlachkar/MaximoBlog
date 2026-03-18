@@ -1,0 +1,66 @@
+<div class="max-w-4xl mx-auto py-10 relative">
+  <!-- Decorative background glows -->
+  <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-maximo-purple/5 blur-[100px] rounded-full pointer-events-none"></div>
+  
+  <div class="glass-panel p-8 md:p-10 relative z-10 border-maximo-cyan/20">
+    <div class="mb-8 border-b border-white/10 pb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-display text-white mb-2">{{ isEditMode ? 'Reconfigure Script' : 'Upload New Script' }}</h1>
+        <p class="text-gray-400 text-sm font-mono">Inject your code into the global databanks</p>
+      </div>
+      <div class="w-12 h-12 bg-maximo-cyan/10 rounded items-center justify-center flex border border-maximo-cyan/30 text-maximo-cyan">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+      </div>
+    </div>
+
+    <div *ngIf="loadingData" class="flex justify-center py-10">
+      <div class="w-10 h-10 border-4 border-maximo-cyan border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <div *ngIf="error" class="mb-6 p-4 rounded bg-red-500/10 border border-red-500/50 text-red-400 text-sm font-mono">
+      > ERROR: {{ error }}
+    </div>
+
+    <form *ngIf="!loadingData" (ngSubmit)="onSubmit()" #scriptForm="ngForm" class="space-y-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-300 mb-2 font-mono">Title</label>
+          <input type="text" name="title" [(ngModel)]="title" required minlength="3" maxlength="255" class="input-field text-lg font-bold" placeholder="e.g. Docker Container Cleanup">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2 font-mono">Language / Category</label>
+          <select name="category" [(ngModel)]="category" required class="input-field py-[10px] w-full text-white bg-black/50 border-white/10 focus:border-maximo-cyan focus:ring-maximo-cyan">
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2 font-mono">Description</label>
+        <textarea name="description" [(ngModel)]="description" required rows="2" maxlength="500" class="input-field text-sm" placeholder="Briefly describe what this script automates or solves..."></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2 font-mono">Raw Code</label>
+        <div class="relative group">
+          <div class="absolute inset-0 bg-maximo-cyan/20 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+          <textarea name="code" [(ngModel)]="code" required rows="14" class="relative input-field font-mono text-green-400 text-sm leading-relaxed bg-[#0b0f19] border-white/20 focus:border-maximo-cyan focus:ring-maximo-cyan resize-y whitespace-pre" placeholder="#!/bin/bash&#10;&#10;echo 'Running automation...'"></textarea>
+        </div>
+      </div>
+
+      <div class="pt-6 border-t border-white/10 flex justify-end gap-4">
+        <button type="button" (click)="cancel()" class="btn-secondary px-6 border-gray-600 hover:border-gray-400 text-gray-400 hover:text-white">Abort</button>
+        <button type="submit" [disabled]="scriptForm.invalid || loading" class="btn-primary px-8 flex justify-center items-center min-w-[140px] disabled:opacity-50 disabled:cursor-not-allowed border-maximo-cyan hover:shadow-[0_0_20px_rgba(0,240,255,0.7)]">
+          <span *ngIf="!loading">{{ isEditMode ? 'Execute Update' : 'Initialize Upload' }}</span>
+          <svg *ngIf="loading" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

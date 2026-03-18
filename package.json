@@ -2,8 +2,7 @@
     "name": "maximoblog-fullstack",
     "version": "1.0.0",
     "scripts": {
-        "start": "node backend/server.js",
-        "build": "cd frontend && npm install && ng build --prod"
+        "start": "node backend/server.js"
     },
     "dependencies": {
         "express": "^4.18.2",
